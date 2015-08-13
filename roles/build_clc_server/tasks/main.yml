@@ -1,0 +1,56 @@
+- name: CLC | Generate Server Admin Password
+  command: openssl rand -base64 15
+  register: serverpass
+  changed_when: False
+
+- name: CLC | Create MINECRAFT Group
+  clc_group:
+    name: "{{ group_name }}"
+    location: "{{ datacenter }}"
+    state: present
+
+- name: CLC | Build MINECRAFT Server if Needed
+  clc_server:
+    name: "{{ server_name }}"
+    location: "{{ datacenter }}"
+    template: ubuntu-14-64
+    password: "{{ serverpass.stdout }}"
+    exact_count: 1
+    group: "{{ group_name }}"
+    count_group: "{{ group_name }}"
+    cpu: "{{ cpu }}"
+    memory: "{{ memory }}"
+    type: "{{ type }}"
+    storage_type: "{{ storage_type }}"
+  register: mc
+
+- name: CLC | Add public ipaddress
+  clc_publicip:
+    server_ids: "{{ item.name }}"
+    ports:
+      - "80"
+    state: present
+  with_flattened: mc.servers
+
+- name: Wait for SSH to Come up on New Servers
+  wait_for: host={{ item.ipaddress }} port=22 delay=5 timeout=320 state=started
+  with_flattened:
+    - mc.servers
+
+- name: Update known_hosts With New Servers
+  shell: "ssh-keygen -R {{ item.ipaddress }} && ssh-keyscan -t rsa -H {{ item.ipaddress }} >> ~/.ssh/known_hosts"
+  with_flattened:
+    - mc.servers
+
+- name: Deploy SSH Key to New Servers (Ubuntu)
+  shell: "echo '{{ public_key }}'|sshpass -p '{{ serverpass.stdout }}' ssh root@{{ item.ipaddress }} 'cat >> ~/.ssh/authorized_keys'"
+  with_flattened:
+    - mc.servers
+
+- name: Add New Servers to an in-memory Group
+  add_host:
+    name={{ item.name }}
+    ansible_ssh_host={{ item.ipaddress }}
+    ansible_ssh_user=root
+    groupname=MINECRAFT
+  with_items: mc.servers

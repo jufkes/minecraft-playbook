@@ -1,0 +1,9 @@
+public_key: "{{ lookup('file', './keys/ssh-rsa-key.pub') }}"
+group_size: 1
+type: standard
+storage_type: standard
+cpu: 1
+memory: 2
+datacenter: 'WA1'
+group_name: MINECRAFT
+server_name: MCRAFT

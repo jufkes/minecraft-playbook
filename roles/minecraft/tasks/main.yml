@@ -1,0 +1,6 @@
+---
+- include: server-rereqs.yml
+- include: install-mc.yml
+- include: cfg-mc.yml
+- include: run-mc.yml
+- include: profit.yml
