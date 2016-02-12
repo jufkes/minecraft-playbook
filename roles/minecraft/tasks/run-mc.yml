@@ -8,13 +8,9 @@
     group: "{{ minecraft_group }}"
     mode: 0644
   notify: restart minecraft
-  tags:
-    - run-mc
 
 - name: ensure minecraft is up
   service:
     name: minecraft
     state: started
     enabled: yes
-  tags:
-    - run-mc

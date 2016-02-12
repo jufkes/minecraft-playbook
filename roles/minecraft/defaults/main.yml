@@ -28,3 +28,37 @@ minecraft_server_properties: {}
 # Upstart-specific settings
 minecraft_upstart_kill_timeout: 120
 minecraft_upstart_respawn_limit: 3 120
+
+# server.properties
+allow-flight: false
+allow-nether: true
+announce-player-achievements: true
+difficulty: 1
+enable-command-block: false
+enbale-query: false
+enable-rcon: false
+force-gamemode: false
+gamemode: 0
+generate-structures: true
+generator-settings:
+hardcore: false
+level-seed:
+level-name: ChocolateCremePies
+level-type: DEFAULT
+max-build-height: 256
+max-players: 20
+motd: Welcome to Thunderdome!
+online-mode: true
+op-permission-level: 2
+player-idle-timeout: 0
+pvp: true
+resource-pack:
+server-ip: "{{ hostvars[groups['MINECRAFT'][0]]['ansible_eth0']['ipv4']['address'] }}"
+server-port: 25565
+snooper-enabled: true
+spawn-animals: true
+spawn-monsters: true
+spawn-npcs: true
+spawn-protection: 16
+view-distance: 8
+white-list: false

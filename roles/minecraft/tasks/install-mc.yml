@@ -1,16 +1,12 @@
 ---
 - name: Create a minecraft group
-  group: 
+  group:
     name: "{{ minecraft_group }}"
-  tags:
-    - install-mc
 
 - name: Create a minecraft user
   user:
     name: "{{ minecraft_user }}"
     group: "{{ minecraft_group }}"
-  tags:
-    - install-mc
 
 - name: Create minecraft directories
   file:
@@ -28,8 +24,6 @@
   - "{{ minecraft_root_dir }}/backup"
   - "{{ minecraft_root_dir }}/backup/diff"
   - "{{ minecraft_root_dir }}/backup/full"
-  tags:
-    - install-mc
 
 - name: Download minecraft executable
   get_url:
@@ -38,5 +32,3 @@
     owner: "{{ minecraft_user}}"
     group: "{{ minecraft_group }}"
     mode: 0644
-  tags:
-    - install-mc

@@ -6,5 +6,3 @@
   with_items:
     - openssh-server
     - wget
-  tags:
-    - server-req

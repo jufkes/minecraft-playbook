@@ -1,4 +1,4 @@
-- hosts: MINECRAFT 
+- hosts: MINECRAFT
   gather_facts: true
   roles:
     - minecraft
